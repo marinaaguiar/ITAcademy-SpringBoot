@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS fruitdb;
+
+USE fruitdb;
+
+CREATE TABLE IF NOT EXISTS fruit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    quantity_kilos INT NOT NULL
+);
