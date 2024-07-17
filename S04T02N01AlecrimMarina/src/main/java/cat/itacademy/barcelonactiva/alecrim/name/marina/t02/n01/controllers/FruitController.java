@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/fruit")
@@ -29,26 +28,32 @@ public class FruitController {
 
     @PutMapping("/update")
     public ResponseEntity<Fruit> updateFruit(@RequestBody Fruit fruit) {
-        Optional<Fruit> updatedFruit = fruitService.updateFruit(fruit);
-        return updatedFruit.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            fruitService.updateFruit(fruit);
+            return new ResponseEntity<>(fruit, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteFruit(@PathVariable int id) {
-        boolean isDeleted = fruitService.deleteFruit(id);
-        if (isDeleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
+        try {
+            fruitService.deleteFruit(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/getOne/{id}")
     public ResponseEntity<Fruit> getFruitById(@PathVariable int id) {
-        Optional<Fruit> fruit = fruitService.getFruitByID(id);
-        return fruit.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Fruit fruit = fruitService.getFruitByID(id);
+            return new ResponseEntity<>(fruit, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/getAll")
